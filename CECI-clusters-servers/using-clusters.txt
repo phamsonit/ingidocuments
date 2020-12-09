@@ -1,0 +1,57 @@
+connect
+===================================================
+
+ssh -i ~/.ssh/id_rsa.ceci hpham@hmem.cism.ucl.ac.be
+
+
+.ssh/config
+===================================================
+Host hmem
+    HostName hmem.cism.ucl.ac.be
+    User hpham
+    ForwardX11 yes
+    ForwardAgent yes
+    IdentityFile ~/.ssh/id_rsa_ceci
+	
+new connection command
+===================================================
+
+ssh hmem
+
+
+Copying files back and forth
+===================================================
+from local to cluster
+scp -r mydir/ clustername:
+
+from cluster to local
+scp clustername:mydir/file1 local/folder/
+
+or rsync
+
+
+Transferring a large number of small files
+===================================================
+tar cz ./source_dir | ssh hmem 'tar xvz -C destination/path'
+
+
+
+Creating a job
+===================================================
+For instance, the following script, hypothetically named submit.sh,
+
+#!/bin/bash
+#
+#SBATCH --job-name=test
+#SBATCH --output=res.txt
+#
+#SBATCH --ntasks=1
+#SBATCH --time=10:00
+#SBATCH --mem-per-cpu=1000
+
+srun hostname
+srun sleep 60
+
+
+submit it to slurm through the sbatch command:
+$ sbatch submit.sh
